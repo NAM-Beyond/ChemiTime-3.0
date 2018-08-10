@@ -2,17 +2,14 @@
 
 A simple web application to display a timeline of medications taken by patients
 
-It's based on 2 different main inputs by the user :
+It's based on 3 different main inputs by the user :
+  1) Top-Left : Name of treatment zone (INN)
+  2 Top-Right : Dose taken
+  3) Bottom-Right ! Time display with alignement to dose boxes
+  
+Aimed to use CSS "grid" and "flex" in order to have easy aligned elements and simplify the code that manage treatment input
 
-  Time of beginning and end of a treatment
-  
-  Treatment considered which include as sub-inputs : a) Name of treatment + a list of the already existing treatment b) Dose c) Selecting a color to ease readability
-  
-  Submit button
-  
-  Few lines of "How to use this application"
-
-Aimed to use drag-and-drop function for this version.
+Few lines of "How to use this application"
 
 Considering that the timeline could have a quite wide range (several years of treatment), code should be as simple as possible and an option to select range of time to display should be available.
 
