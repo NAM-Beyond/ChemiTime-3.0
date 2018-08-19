@@ -5,7 +5,7 @@ A simple web application to display a timeline of medications taken by patients
 It's based on 3 different main inputs by the user :
   1) Top-Left : Name of treatment (INN)
   2) Top-Right : Dose taken
-  3) Bottom-Right ! Time display with alignement to dose boxes
+  3) Bottom-Right : Time display with alignement to dose boxes
   
 Aimed to use CSS "grid" and "flex" in order to have easy aligned elements and simplify the code that manage treatment input
 
