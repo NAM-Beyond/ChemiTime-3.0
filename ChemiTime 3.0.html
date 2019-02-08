@@ -3,54 +3,94 @@
 <head>
   <meta charset="utf-8">
   <style>
-  body {
-    font-weight: bold;
-    font-size: 20px;
-    font-family: "Times New Roman", Arial;
-  }
-  #Inputs {
-    width: 100%;
-    padding-top: 3px;
+  #Title {
+    filter: drop-shadow(0px 2px 2px #000000);
     text-align: center;
     background-color: #AAAAFF;
-    filter: drop-shadow(0px 1px 1px black);
+    font-weight: bold;
   }
   .MainGrid {
-    padding-top: 5px;
+    margin-top: 10px;
     display: grid;
     grid-gap: 1px;
+    font-weight: bold;
   }
-  .MainGrid > div {
-    border: 2px solid #000000;
+  .MainGrid > .INNBox, .DoseBox, .TimeBox {
+    border: 1px solid #000000;
     border-radius: 5px;
-    padding-top: 3px;
     text-align: center;
+    padding-bottom: 4px;
+  }
+  .INNBox {
+    grid-column: 1 / 1;
+    grid-row: 1;
   }
   .DoseBox {
-    grid-column: 2 / 5;
+    grid-column: 2 / 10;
     grid-row: 1;
   }
   .TimeBox {
-    grid-column: 2 / 5;
+    grid-column: 2 / 10;
     grid-row: 2;
   }
+  .hr {
+    margin-top: 0px;
+    margin-bottom: 3px;
+    border: 1px solid #000000;
+  }
+  .buttons {
+    margin-top: 1px;
+    padding-bottom: 4px;
+    margin-bottom: 2px;
+    line-height: 25px;
+    font-size: 25px;
+    border: 1px solid #000000;
+    border-radius: 12px;
+    background-color: #0099FF;
+    color: #FFFFFF;
+    }
   </style>
   <script>
+    var ChangeCount = 0;
+    var ColumnCount = 0;
+    var RowCount = 0;
+    function Light(x,y,z) {
+      document.getElementsByClassName("MainGrid")[0].childNodes[x].childNodes[3].style.color = y;
+      document.getElementsByClassName("MainGrid")[0].childNodes[x].childNodes[3].style.backgroundColor = z;
+    }
+    function AddData(x) {
+      ChangeCount += 1;
+      NewForm = document.createElement("div");
+      NewData = document.createElement("input");
+      NewData.type = "text";
+      SubmitButton = document.createElement("input");
+      SubmitButton.type = "submit";
+      SubmitButton.value = "OK";
+      NewForm.appendChild(NewData);
+      NewForm.appendChild(SubmitButton);
+      document.getElementsByClassName("MainGrid")[0].childNodes[x].appendChild(NewForm);
+    }
   </script>
 </head>
 <body>
-  <div id="Inputs">
-    CHEMITIME - v 3.0
-  </div>
-  <div class="MainGrid">
-    <div class="INNBox">INN
-    </div>
-    <div class="DoseBox">DOSE
-    </div>
-    <p style="margin:0; text-align:center;">
-    </p>
-    <div class="TimeBox">TIME
-    </div>
-  </div>
+  <header id="Title">CHEMITIME - version 3.0</header>
+  <section class="MainGrid">
+    <article class="INNBox">
+      INN
+      <hr class="hr">
+      <button class="buttons" onclick="AddData(1)" onmouseover="Light(1,'#FF0000','#FFFFFF')" onmouseout="Light(1,'#FFFFFF','#0099FF')">+</button>
+    </article>
+    <article class="DoseBox">
+      DOSE
+      <hr class="hr">
+      <button class="buttons" onclick="AddData(3)" onmouseover="Light(3,'#FF0000','#FFFFFF')" onmouseout="Light(3,'#FFFFFF','#0099FF')">+</button>
+    </article>
+    <article class="TimeBox">
+      TIME
+      <hr class="hr">
+      <button class="buttons" onclick="AddData(5)" onmouseover="Light(5,'#FF0000','#FFFFFF')" onmouseout="Light(5,'#FFFFFF','#0099FF')">+</button>
+    </article>
+  </section>
+  <footer><b>FOOTER</b></footer>
 </body>
 </html>
