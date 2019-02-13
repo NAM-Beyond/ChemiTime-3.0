@@ -9,88 +9,99 @@
     background-color: #AAAAFF;
     font-weight: bold;
   }
-  .MainGrid {
+  #MainGrid {
     margin-top: 10px;
     display: grid;
-    grid-gap: 1px;
     font-weight: bold;
   }
-  .MainGrid > .INNBox, .DoseBox, .TimeBox {
+  #MainGrid > #INNBox, #DoseBox, #TimeBox {
     border: 1px solid #000000;
     border-radius: 5px;
     text-align: center;
     padding-bottom: 4px;
   }
-  .INNBox {
+  #INNBox {
     grid-column: 1 / 1;
     grid-row: 1;
+    display: grid;
   }
-  .DoseBox {
+  #DoseBox {
     grid-column: 2 / 10;
     grid-row: 1;
+    display: grid;
   }
-  .TimeBox {
+  #TimeBox {
     grid-column: 2 / 10;
     grid-row: 2;
+    display: grid;
   }
   .hr {
-    margin-top: 0px;
-    margin-bottom: 3px;
     border: 1px solid #000000;
   }
   .buttons {
-    margin-top: 1px;
+    text-align: center;
     padding-bottom: 4px;
-    margin-bottom: 2px;
-    line-height: 25px;
-    font-size: 25px;
-    border: 1px solid #000000;
+    border: 1px solid #00000020;
     border-radius: 12px;
-    background-color: #0099FF;
-    color: #FFFFFF;
+    background-color: #FFFFFF;
+    color: #00000020;
     }
   </style>
   <script>
-    var ChangeCount = 0;
-    var ColumnCount = 0;
-    var RowCount = 0;
+    var INNCount = 0;
+    var TimeCount = 0;
+    var DoseCount = 0;
+    var ButtonCount = 3;
     function Light(x,y,z) {
-      document.getElementsByClassName("MainGrid")[0].childNodes[x].childNodes[3].style.color = y;
-      document.getElementsByClassName("MainGrid")[0].childNodes[x].childNodes[3].style.backgroundColor = z;
+      document.getElementById("button" + x).style.color = y;
+      document.getElementById("button" + x).style.backgroundColor = z;
     }
     function AddData(x) {
-      ChangeCount += 1;
-      NewForm = document.createElement("div");
-      NewData = document.createElement("input");
-      NewData.type = "text";
-      SubmitButton = document.createElement("input");
-      SubmitButton.type = "submit";
-      SubmitButton.value = "OK";
-      NewForm.appendChild(NewData);
-      NewForm.appendChild(SubmitButton);
-      document.getElementsByClassName("MainGrid")[0].childNodes[x].appendChild(NewForm);
+      if (x == 100) {
+        INNCount += 1;
+        let RowAdjustment = INNCount + 1;
+        document.getElementById("button" + x).outerHTML = "";
+        let NewData = document.createElement("input");
+        NewData.type = "text";
+        NewData.setAttribute("style", "grid-column: 1 / 1; grid-row: " + RowAdjustment + ";");
+        document.getElementById("INNBox").appendChild(NewData);
+      }
     }
   </script>
 </head>
 <body>
   <header id="Title">CHEMITIME - version 3.0</header>
-  <section class="MainGrid">
-    <article class="INNBox">
-      INN
-      <hr class="hr">
-      <button class="buttons" onclick="AddData(1)" onmouseover="Light(1,'#FF0000','#FFFFFF')" onmouseout="Light(1,'#FFFFFF','#0099FF')">+</button>
-    </article>
-    <article class="DoseBox">
-      DOSE
-      <hr class="hr">
-      <button class="buttons" onclick="AddData(3)" onmouseover="Light(3,'#FF0000','#FFFFFF')" onmouseout="Light(3,'#FFFFFF','#0099FF')">+</button>
-    </article>
-    <article class="TimeBox">
-      TIME
-      <hr class="hr">
-      <button class="buttons" onclick="AddData(5)" onmouseover="Light(5,'#FF0000','#FFFFFF')" onmouseout="Light(5,'#FFFFFF','#0099FF')">+</button>
-    </article>
-  </section>
-  <footer><b>FOOTER</b></footer>
+  <div id="MainGrid">
+    <div id="INNBox">
+      <div style="grid-column: 1 / 1; grid-row: 1;">
+        INN
+        <hr class="hr">
+      </div>
+      <button style="grid-column: 1 / 1; grid-row: 2;" id="button100" class="buttons" onclick="AddData(100)" onmouseover="Light(100,'#FFFFFF','#0099FF')" onmouseout="Light(100,'#00000020','#FFFFFF')">
+        +
+      </button>
+    </div>
+    <div id="DoseBox">
+      <div style="grid-column: 1 / 1; grid-row: 1;">
+        Dose
+        <hr class="hr">
+      </div>
+      <button style="grid-column: 1 / 1; grid-row: 2;" id="button200" class="buttons" onclick="AddData(200)" onmouseover="Light(200,'#FFFFFF','#0099FF')" onmouseout="Light(200,'#00000020','#FFFFFF')">
+        +
+      </button>
+    </div>
+    <div id="TimeBox">
+      <div style="grid-column: 1 / 1; grid-row: 1;">
+        Time
+        <hr class="hr">
+      </div>
+      <button style="grid-column: 1 / 1; grid-row: 2;" id="button300" class="buttons" onclick="AddData(300)" onmouseover="Light(300,'#FFFFFF','#0099FF')" onmouseout="Light(300,'#00000020','#FFFFFF')">
+        +
+      </button>
+    </div>
+  </div>
+  <footer>
+    <b>FOOTER</b>
+  </footer>
 </body>
 </html>
