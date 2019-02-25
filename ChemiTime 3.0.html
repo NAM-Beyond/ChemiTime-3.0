@@ -1,73 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>ChemiTime 3.0</title>
   <meta charset="utf-8">
-  <style>
-  #Title {
-    filter: drop-shadow(0px 2px 2px #000000);
-    text-align: center;
-    background-color: #AAAAFF;
-    font-weight: bold;
-  }
-  #MainGrid {
-    margin-top: 10px;
-    display: grid;
-    font-weight: bold;
-  }
-  #MainGrid > #INNBox, #DoseBox, #TimeBox {
-    border: 1px solid #000000;
-    border-radius: 5px;
-    text-align: center;
-    padding-bottom: 4px;
-  }
-  #INNBox {
-    grid-column: 1 / 1;
-    grid-row: 1;
-    display: grid;
-  }
-  #DoseBox {
-    grid-column: 2 / 10;
-    grid-row: 1;
-    display: grid;
-  }
-  #TimeBox {
-    grid-column: 2 / 10;
-    grid-row: 2;
-    display: grid;
-  }
-  .hr {
-    border: 1px solid #000000;
-  }
-  .buttons {
-    text-align: center;
-    padding-bottom: 4px;
-    border: 1px solid #00000020;
-    border-radius: 12px;
-    background-color: #FFFFFF;
-    color: #00000020;
-    }
-  </style>
-  <script>
-    var INNCount = 0;
-    var TimeCount = 0;
-    var DoseCount = 0;
-    var ButtonCount = 3;
-    function Light(x,y,z) {
-      document.getElementById("button" + x).style.color = y;
-      document.getElementById("button" + x).style.backgroundColor = z;
-    }
-    function AddData(x) {
-      if (x == 100) {
-        INNCount += 1;
-        let RowAdjustment = INNCount + 1;
-        document.getElementById("button" + x).outerHTML = "";
-        let NewData = document.createElement("input");
-        NewData.type = "text";
-        NewData.setAttribute("style", "grid-column: 1 / 1; grid-row: " + RowAdjustment + ";");
-        document.getElementById("INNBox").appendChild(NewData);
-      }
-    }
-  </script>
+  <link rel="stylesheet" type="text/css" href="DevToolsStyle.css">
+  <script src="DevToolsScript.js"></script>
 </head>
 <body>
   <header id="Title">CHEMITIME - version 3.0</header>
@@ -77,7 +14,7 @@
         INN
         <hr class="hr">
       </div>
-      <button style="grid-column: 1 / 1; grid-row: 2;" id="button100" class="buttons" onclick="AddData(100)" onmouseover="Light(100,'#FFFFFF','#0099FF')" onmouseout="Light(100,'#00000020','#FFFFFF')">
+      <button style="grid-column: 1 / 1; grid-row: 2;" id="button100" class="buttons" onclick="NewData(100)" onmouseover="Light(100,'#FFFFFF','#0099FF')" onmouseout="Light(100,'#00000020','#FFFFFF')">
         +
       </button>
     </div>
@@ -86,7 +23,7 @@
         Dose
         <hr class="hr">
       </div>
-      <button style="grid-column: 1 / 1; grid-row: 2;" id="button200" class="buttons" onclick="AddData(200)" onmouseover="Light(200,'#FFFFFF','#0099FF')" onmouseout="Light(200,'#00000020','#FFFFFF')">
+      <button style="grid-column: 1 / 1; grid-row: 2;" id="button200" class="buttons" onclick="NewData(200)" onmouseover="Light(200,'#FFFFFF','#0099FF')" onmouseout="Light(200,'#00000020','#FFFFFF')">
         +
       </button>
     </div>
@@ -95,7 +32,7 @@
         Time
         <hr class="hr">
       </div>
-      <button style="grid-column: 1 / 1; grid-row: 2;" id="button300" class="buttons" onclick="AddData(300)" onmouseover="Light(300,'#FFFFFF','#0099FF')" onmouseout="Light(300,'#00000020','#FFFFFF')">
+      <button style="grid-column: 1 / 1; grid-row: 2;" id="button300" class="buttons" onclick="NewData(300)" onmouseover="Light(300,'#FFFFFF','#0099FF')" onmouseout="Light(300,'#00000020','#FFFFFF')">
         +
       </button>
     </div>

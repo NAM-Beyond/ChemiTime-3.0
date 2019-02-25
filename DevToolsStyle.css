@@ -1,0 +1,42 @@
+#Title {
+      filter: drop-shadow(0px 2px 2px #000000);
+      background-color: #AAAAFF;
+      text-align: center;
+      font-weight: bold;
+    }
+    #MainGrid {
+      margin-top: 10px;
+      display: grid;
+      text-align: center;
+      font-weight: bold;
+    }
+    #MainGrid > #INNBox, #DoseBox, #TimeBox {
+      border: 1px solid #000000;
+      border-radius: 5px;
+      padding-bottom: 4px;
+    }
+    #INNBox {
+      grid-column: 1 / 1;
+      grid-row: 1;
+      display: grid;
+    }
+    #DoseBox {
+      grid-column: 2 / 10;
+      grid-row: 1;
+      display: grid;
+    }
+    #TimeBox {
+      grid-column: 2 / 10;
+      grid-row: 2;
+      display: grid;
+    }
+    .hr {
+      border: 1px solid #000000;
+    }
+    .buttons {
+      padding-bottom: 4px;
+      border: 1px solid #00000020;
+      border-radius: 12px;
+      background-color: #FFFFFF;
+      color: #00000020;
+    }
