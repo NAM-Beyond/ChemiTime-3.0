@@ -1,59 +1,81 @@
-var INNCount = 0;
-var DoseCount = 0;
-var TimeCount = 0;
+var MainList = [[],[],[]];
 var CurrentSection = 0;
 var CurrentRow = 0;
 var CurrentColumn = 0;
-var Grids = ["", "INNBox", "DoseBox", "TimeBox"];
-function Light(ButtonNumber, ButtonFontColor, ButtonBackgroundColor) {
-    document.getElementById(ButtonNumber).style.color = ButtonFontColor;
-    document.getElementById(ButtonNumber).style.backgroundColor = ButtonBackgroundColor;
+var Grids = ["INNBox", "DoseBox", "TimeBox"];
+function Light(ButtonLocation, ButtonFontColor, ButtonBackgroundColor) {
+    document.getElementById(ButtonLocation).style.color = ButtonFontColor;
+    document.getElementById(ButtonLocation).style.backgroundColor = ButtonBackgroundColor;
 }
-function NewEntry(ButtonNumber) {
-    CurrentSection = Math.floor(ButtonNumber / 10000);
-    CurrentRow = Math.floor((ButtonNumber - CurrentSection * 10000) / 100);
-    CurrentColumn = ButtonNumber - CurrentSection * 10000 - CurrentRow * 100;
-    document.getElementById(ButtonNumber).outerHTML = "";
-    let NewEntry = document.createElement("input");
-    NewEntry.type = "text";
-    NewEntry.id = "NewEntry";
-    NewEntry.setAttribute("style", "grid-row: " + CurrentRow + "; grid-column: " + CurrentColumn + ";");
-    NewEntry.setAttribute("onkeypress", "NewData(event)");
-    document.getElementById(Grids[CurrentSection]).appendChild(NewEntry);
+function AddInputField(ButtonLocation) {
+    CurrentSection = Math.floor(ButtonLocation / 10000);
+    CurrentRow = Math.floor((ButtonLocation - CurrentSection * 10000) / 100);
+    CurrentColumn = ButtonLocation - CurrentSection * 10000 - CurrentRow * 100;
+    document.getElementById(ButtonLocation).outerHTML = "";
+    NewField = document.createElement("input");
+    NewField.type = "text";
+    NewField.id = ButtonLocation;
+    NewField.setAttribute("style", "grid-row: " + CurrentRow + "; grid-column: " + CurrentColumn + ";");
+    NewField.setAttribute("onkeypress", "KeyPressed(event, " + ButtonLocation + ")");
+    document.getElementById(Grids[CurrentSection - 1]).appendChild(NewField);
 }
-function NewData(event) {
-    let y = event.which || event.keyCode;
+function KeyPressed(event, InputLocation) {
+    y = event.which || event.keyCode;
     if (y == 13) {
-        let NewData = document.getElementById("NewEntry").value;
-        document.getElementById("NewEntry").outerHTML = "";
-        let NewLine = document.createElement("div");
-        NewLine.innerHTML = NewData;
-        NewLine.style.height = 25 + "px";
-        NewLine.style.lineHeight = 25 + "px";
-        NewLine.style.marginTop = 5 + "px";
-        NewLine.style.marginBottom = 5 + "px";
-        document.getElementById(Grids[CurrentSection]).appendChild(NewLine);
-        if (CurrentSection == 1) {
-            CurrentRow += 1;
-            if (CurrentRow < 10) {CurrentRow = "0" + CurrentRow;}
-            CurrentColumn = "0" + CurrentColumn;
-            ButtonNumber = CurrentSection.toString() + CurrentRow.toString() + CurrentColumn;
-            NewButton(CurrentSection, CurrentColumn, CurrentRow, ButtonNumber);
-            CurrentSection += 1; 
-            ButtonNumber = CurrentSection + CurrentRow + CurrentColumn;
-            NewButton(CurrentSection, CurrentColumn, CurrentRow, ButtonNumber);
+        AddData(InputLocation);
+    }
+}
+function AddData(InputLocation) {
+    NewValue = document.getElementById(InputLocation).value;
+    MainList[CurrentSection - 1].push([InputLocation, NewValue]);
+    if (CurrentSection == 1) {
+        document.getElementById(InputLocation).outerHTML = "";
+        LocationCorrection();
+        AddLine(1, CurrentRow, CurrentColumn, NewValue);
+        CurrentRow = parseInt(CurrentRow) + 1;
+        LocationCorrection();
+        AddButton(1, CurrentRow, CurrentColumn);
+    }
+    if (CurrentSection == 3) {
+        MainList[2].sort();
+        document.getElementById("TimeBox").innerHTML = "";
+        AddButton(3, "01", "01");
+        CurrentColumn = 1;
+        for (x = 0; x < MainList[2].length; x++) {
+            CurrentColumn = parseInt(CurrentColumn) + 1;
+            LocationCorrection();
+            AddLine(3, CurrentRow, CurrentColumn, MainList[2][x][1]);
+            CurrentColumn = parseInt(CurrentColumn) + 1;
+            LocationCorrection();
+            AddButton(3, CurrentRow, CurrentColumn);
         }
     }
 }
-function NewButton(Section, Column, Row, ButtonId) {
-    let NewButton = document.createElement("button");
-    NewButton.setAttribute("style", " grid-row: " + Row + "; grid-column: " + Column + ";");
+function LocationCorrection() {
+    if (parseInt(CurrentRow) < 10) {
+        CurrentRow = "0" + parseInt(CurrentRow);
+    }
+    if (parseInt(CurrentColumn) < 10) {
+        CurrentColumn = "0" + parseInt(CurrentColumn);
+    }
+}
+function AddLine(Section, Row, Column, Value) {
+    NewData = document.createElement("div");
+    NewData.innerHTML = Value;
+    LineLocation = Section.toString() + Row.toString() + Column.toString();
+    NewData.id = LineLocation;
+    NewData.setAttribute("style", "grid-row: " + Row + "; grid-column: " + Column + ";");
+    document.getElementById(Grids[Section - 1]).appendChild(NewData);
+}
+function AddButton(Section, Row, Column) {
+    NewButton = document.createElement("button");
+    ButtonId = Section.toString() + Row.toString() + Column.toString();
     NewButton.id = ButtonId;
-    NewButton.className = "Buttons";
-    NewButton.setAttribute("onclick", "NewEntry(" + ButtonId + ")");
-    NewButton.setAttribute("ontouchstart", "NewEntry(" + ButtonId + ")");
+    NewButton.setAttribute("style", " grid-row: " + Row + "; grid-column: " + Column + ";");
+    NewButton.setAttribute("onclick", "AddInputField(" + ButtonId + ")");
+    NewButton.setAttribute("ontouchstart", "AddInputField(" + ButtonId + ")");
     NewButton.setAttribute("onmouseover", "Light(" + ButtonId + ", '#FFFFFF', '#0099FF')");
     NewButton.setAttribute("onmouseout", "Light(" + ButtonId + ", '#00000040', '#FFFFFF')");
     NewButton.innerHTML = "+";
-    document.getElementById(Grids[Section]).appendChild(NewButton);
+    document.getElementById(Grids[Section - 1]).appendChild(NewButton);
 }
