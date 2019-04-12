@@ -29,40 +29,39 @@ function AddData(InputLocation) {
         }
     }
     if (CurrentSection == 1) {
-        AddLine(1, (CurrentRow < 10 ? "0" + CurrentRow : CurrentRow), "01", NewValue);
-        AddButton(1, (CurrentRow + 1 < 10 ? "0" + (CurrentRow + 1) : (CurrentRow + 1)), "01");
+        AddLine(1, (CurrentRow < 10 ? "0" + CurrentRow : CurrentRow), "01", "01", NewValue);
+        AddButton(1, (CurrentRow + 1 < 10 ? "0" + (CurrentRow + 1) : (CurrentRow + 1)), "01", "01");
+        FirstEmptyField = document.createElement("div");
+        FirstEmptyField.setAttribute("style", "grid-row: " + CurrentRow + "; grid-column: " + 1 + "/" + 4 + ";");
+        FirstEmptyField.innerHTML = "&nbsp;";
+        document.getElementById("DoseBox").appendChild(FirstEmptyField);
+        SecondEmptyField = document.createElement("div");
+        SecondEmptyField.setAttribute("style", "grid-row: " + CurrentRow + "; grid-column: " + (document.getElementById("TimeBox").childNodes.length * 2 - 2) + "/" + (document.getElementById("TimeBox").childNodes.length * 2 + 1) + ";");
+        SecondEmptyField.innerHTML = "&nbsp;";
+        document.getElementById("DoseBox").appendChild(SecondEmptyField);
     }
     if (CurrentSection == 3) {
         MainList[2].sort();
-        AddButton(3, "01", (CurrentColumn < 10 ? "0" + CurrentColumn : CurrentColumn));
-        for (x = CurrentColumn + 1; x <= document.getElementById("TimeBox").childNodes.length; x++) {
-            if (document.getElementById(3 + "01" + (x < 10 ? "0" + x : x)).localName == "div") {
-                MainList[2][x / 2][0] = parseInt(3 + "01" + (x + 2 < 10 ? "0" + (x + 2) : x + 2));
-            }
-            if (document.getElementById(3 + "01" + (x < 10 ? "0" + x : x)).localName == "button") {
-                document.getElementById(3 + "01" + (x < 10 ? "0" + x : x)).setAttribute("onclick", "AddInputField(" + 3 + "01" + (x + 2 < 10 ? "0" + (x + 2) : x + 2) + ")");
-                document.getElementById(3 + "01" + (x < 10 ? "0" + x : x)).setAttribute("ontouchstart", "AddInputField(" + 3 + "01" + (x + 2 < 10 ? "0" + (x + 2) : x + 2) + ")");
-                document.getElementById(3 + "01" + (x < 10 ? "0" + x : x)).setAttribute("onmouseover", "Light(" + 3 + "01" + (x + 2 < 10 ? "0" + (x + 2) : x + 2) + ", '#FFFFFF', '#0099FF')");
-                document.getElementById(3 + "01" + (x < 10 ? "0" + x : x)).setAttribute("onmouseout", "Light(" + 3 + "01" + (x + 2 < 10 ? "0" + (x + 2) : x + 2) + ", '#00000040', '#FFFFFF')");
-            }
-            document.getElementById(3 + "01" + (x < 10 ? "0" + x : x)).style.gridColumn = x + 2;
-            document.getElementById(3 + "01" + (x < 10 ? "0" + x : x)).id = 3 + "01" + (x + 2 < 10 ? "0" + (x + 2) : x + 2);
-        }
-        AddLine(3, "01", (CurrentColumn + 1 < 10 ? "0"  + (CurrentColumn + 1) : CurrentColumn + 1), NewValue);
-        AddButton(3, "01", (CurrentColumn + 2 < 10 ? "0" + (CurrentColumn + 2) : CurrentColumn + 2));
+        AddButton(3, "01", (CurrentColumn < 10 ? "0" + CurrentColumn : CurrentColumn), (CurrentColumn < 10 ? "0" + CurrentColumn : CurrentColumn));
+        GridCorrection(3, "01", CurrentColumn + 1);
+        AddLine(3, "01", (CurrentColumn + 1 < 10 ? "0"  + (CurrentColumn + 1) : CurrentColumn + 1), (CurrentColumn + 1 < 10 ? "0"  + (CurrentColumn + 1) : CurrentColumn + 1), NewValue);
+        AddButton(3, "01", (CurrentColumn + 2 < 10 ? "0" + (CurrentColumn + 2) : CurrentColumn + 2), CurrentColumn + 2 < 10 ? "0" + (CurrentColumn + 2) : CurrentColumn + 2);
+    }
+    if (CurrentSection == 2) {
+        AddLine(2, (CurrentRow < 10 ? "0" + CurrentRow : CurrentRow), (CurrentColumn < 10 ? "0" + CurrentColumn : CurrentColumn), (CurrentColumn < 10 ? "0" + CurrentColumn : CurrentColumn), NewValue);
     }
 }
-function AddLine(Section, Row, Column, Value) {
+function AddLine(Section, Row, DebutColumn, EndColumn, Value) {
     NewLine = document.createElement("div");
-    NewLine.id = Section.toString() + Row.toString() + Column.toString();
-    NewLine.setAttribute("style", "grid-row: " + Row + "; grid-column: " + Column + ";");
+    NewLine.id = Section.toString() + Row.toString() + DebutColumn.toString();
+    NewLine.setAttribute("style", "grid-row: " + Row + "; grid-column: " + DebutColumn + "/" + EndColumn + ";");
     NewLine.innerHTML = Value;
     document.getElementById(Grids[Section - 1]).appendChild(NewLine);
 }
-function AddButton(Section, Row, Column) {
+function AddButton(Section, Row, DebutColumn, EndColumn) {
     NewButton = document.createElement("button");
-    NewButton.id = Section.toString() + Row.toString() + Column.toString();
-    NewButton.setAttribute("style", " grid-row: " + Row + "; grid-column: " + Column + ";");
+    NewButton.id = Section.toString() + Row.toString() + DebutColumn.toString();
+    NewButton.setAttribute("style", "grid-row:" + Row + "; grid-column:" + DebutColumn + "/" + EndColumn + ";");
     NewButton.setAttribute("onclick", "AddInputField(" + NewButton.id + ")");
     NewButton.setAttribute("ontouchstart", "AddInputField(" + NewButton.id + ")");
     NewButton.setAttribute("onmouseover", "Light(" + NewButton.id + ", '#FFFFFF', '#0099FF')");
@@ -74,5 +73,20 @@ function KeyPressed(event, InputLocation) {
     y = event.which || event.keyCode;
     if (y == 13) {
         AddData(InputLocation);
+    }
+}
+function GridCorrection(Section, Row, Column) {
+    for (x = Column; x <= document.getElementById(Grids[Section - 1]).childNodes.length; x++) {
+        if (document.getElementById(Section + Row + (x < 10 ? "0" + x : x)).localName == "div") {
+            MainList[Section - 1][x / 2][0] = parseInt(Section + Row + (x + 2 < 10 ? "0" + (x + 2) : x + 2));
+        }
+        if (document.getElementById(Section + Row + (x < 10 ? "0" + x : x)).localName == "button") {
+            document.getElementById(Section + Row + (x < 10 ? "0" + x : x)).setAttribute("onclick", "AddInputField(" + Section + Row + (x + 2 < 10 ? "0" + (x + 2) : x + 2) + ")");
+            document.getElementById(Section + Row + (x < 10 ? "0" + x : x)).setAttribute("ontouchstart", "AddInputField(" + Section + Row + (x + 2 < 10 ? "0" + (x + 2) : x + 2) + ")");
+            document.getElementById(Section + Row + (x < 10 ? "0" + x : x)).setAttribute("onmouseover", "Light(" + Section + Row + (x + 2 < 10 ? "0" + (x + 2) : x + 2) + ", '#FFFFFF', '#0099FF')");
+            document.getElementById(Section + Row + (x < 10 ? "0" + x : x)).setAttribute("onmouseout", "Light(" + Section + Row + (x + 2 < 10 ? "0" + (x + 2) : x + 2) + ", '#00000040', '#FFFFFF')");
+        }
+        document.getElementById(Section + Row + (x < 10 ? "0" + x : x)).setAttribute("style", "grid-column:" + (x + 2) + "/" + (x + 2) + ";");
+        document.getElementById(Section + Row + (x < 10 ? "0" + x : x)).id = Section + Row + (x + 2 < 10 ? "0" + (x + 2) : x + 2);
     }
 }
