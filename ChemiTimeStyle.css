@@ -32,8 +32,8 @@ button {
     padding: 0px;
     padding-bottom: 2px;
     padding-top: 2px; 
-    border: 1px solid #00000020;
+    border: 1px solid #00000040;
     border-radius: 12px;
-    background-color: #FFFFFF;
+    background-color: #FFFFFFFF;
     color: #00000040;
 }
