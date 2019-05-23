@@ -41,7 +41,6 @@ function KeyPressed(event, InputLocation) {
     y = event.which || event.keyCode;
     if (y == 13) {
         NewValue = document.getElementById(InputLocation).value;
-        MainList[CurrentSection - 1].push([InputLocation, NewValue]);
         document.getElementById(InputLocation).outerHTML = "";
         AddData(NewValue, InputLocation);
     }
@@ -51,6 +50,7 @@ function KeyPressed(event, InputLocation) {
 function AddData(Value, InputId) {
     if (CurrentSection == 1) /* INN Section */ {
         /* We add the new INN, then we add a button to permit the add of a next INN later */
+        MainList[CurrentSection - 1].push([InputId, Value]);
         AddItem(1, CurrentRow, 1, 1, "div", Value, 1);
         AddItem(1, CurrentRow + 1, 1, 1, "button", "+", 1);
         if (MainList[2].length > 0) {
@@ -64,9 +64,11 @@ function AddData(Value, InputId) {
         }
     }
     if (CurrentSection == 2) /* DoseBox */ {
+        MainList[CurrentSection - 1].push([InputId, Value]);
         AddItem(2, CurrentRow, CurrentColumn, CurrentColumn + 3, "div", Value, ItemNumber);
     }
     if (CurrentSection == 3) /* Time Section */ {
+        MainList[CurrentSection - 1].push([parseInt(2 + "01" + (ItemNumber + 1 < 10 ? "0" + (ItemNumber + 1) : ItemNumber + 1)), Value]);
         MainList[2].sort();
         AddItem(3, 1, CurrentColumn, CurrentColumn, "button", "+", ItemNumber);
         /* If adding a date between two other dates, shift all the element to the right before adding the new date */
@@ -139,8 +141,11 @@ function ColumnCorrection(Section, Row, ChangeStart, ChangeEnd, ElementShift) {
                 AddItem(2, Row, parseInt(TempElement.style.gridColumnStart) - 3, parseInt(TempElement.style.gridColumnStart), "button", "+", x);
             }
             /* Modify the value in the MainList array, according to the new item number */
-            if (TempElement.localName == "div" && TempElement.innerHTML != "&nbsp;") {
-                MainList[Section - 1][MainList[Section - 1].map(function(TempList){return TempList[0]}).indexOf(OldId)][0] = NewId;
+            if (Section == 2 && TempElement.localName == "div" && TempElement.innerHTML != "&nbsp;") {
+                MainList[1][MainList[1].map(function(TempList){return TempList[0]}).indexOf(OldId)][0] = parseInt(NewId);
+            }
+            if (Section == 3 && TempElement.localName == "div") {
+                MainList[2][x / 2 - 1][0] = parseInt(NewId);
             }
         }
     }
