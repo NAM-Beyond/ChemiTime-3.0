@@ -139,17 +139,14 @@ function ColumnCorrection(Section, Row, ChangeStart, ChangeEnd, ElementShift) {
                 AddItem(2, Row, parseInt(TempElement.style.gridColumnStart) - 3, parseInt(TempElement.style.gridColumnStart), "button", "+", x);
             }
             /* Modify the value in the MainList array, according to the new item number */
-            if (Section == 2 && TempElement.localName == "div" && TempElement.innerHTML != "&nbsp;") {
-                /*MainList[1][x][0] = parseInt(NewId);*/
-            }
-            if (Section == 3 && TempElement.localName == "div") {
-                /*MainList[2][x][0] = parseInt(NewId);*/
+            if (TempElement.localName == "div" && TempElement.innerHTML != "&nbsp;") {
+                MainList[Section - 1][MainList[Section - 1].map(function(TempList){return TempList[0]}).indexOf(OldId)][0] = NewId;
             }
         }
     }
 }
 
-/* Tricky subfunction that calculate the exact end of the shifting in the DoseBox to not go further, considering that some dose elements may overlap time elements so we can't use the number of time elements to define that end of shifting */
+/* Tricky sub-function that calculate the exact end of the shifting in the DoseBox to not go further, considering that some dose elements may overlap time elements so we can't use the number of time elements to define that end of shifting */
 function WhichChangeEnd(ButtonLocation, Row) {
     ButtonCompared = parseInt(document.getElementById(ButtonLocation).style.gridColumnStart);
     ListOfColumnStarts = [...document.querySelectorAll("[id^=\"2" + (Row < 10 ? "0" + Row : Row) + "\"]")].map(x => parseInt(x.style.gridColumnStart));
