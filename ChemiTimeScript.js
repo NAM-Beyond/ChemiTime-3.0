@@ -1,8 +1,4 @@
 var MainList = [[],[],[]];
-var CurrentSection = 0;
-var CurrentRow = 0;
-var CurrentColumn = 0;
-var ItemNumber = 0;
 var Grids = ["INNBox", "DoseBox", "TimeBox"];
 window.onload = function RemoveFuckingUselessEmptyTextNodes() {
     for (x = 0; x < 3; x ++) {
@@ -31,12 +27,18 @@ function AddInputField(ButtonId) {
     NewField.setAttribute("onkeypress", "KeyPressed(event, " + ButtonId + ")");
     document.getElementById(Grids[CurrentSection - 1]).appendChild(NewField);
 }
-function AddData(InputId) {
-    NewValue = document.getElementById(InputId).value;
-    MainList[CurrentSection - 1].push([InputId, NewValue]);
-    document.getElementById(InputId).outerHTML = "";
+function KeyPressed(event, InputLocation) {
+    y = event.which || event.keyCode;
+    if (y == 13) {
+        NewValue = document.getElementById(InputLocation).value;
+        MainList[CurrentSection - 1].push([InputLocation, NewValue]);
+        document.getElementById(InputLocation).outerHTML = "";
+        AddData(NewValue, InputLocation);
+    }
+}
+function AddData(Value, InputId) {
     if (CurrentSection == 1) {
-        AddItem(1, CurrentRow, 1, 1, "div", NewValue, 1);
+        AddItem(1, CurrentRow, 1, 1, "div", Value, 1);
         AddItem(1, CurrentRow + 1, 1, 1, "button", "+", 1);
         if (MainList[2].length > 0) {
             AddItem(2, CurrentRow, 1, 3, "div", "&nbsp;", 1);
@@ -52,14 +54,23 @@ function AddData(InputId) {
         if (ItemNumber + 1 < document.getElementById("TimeBox").childNodes.length) {
             ColumnCorrection(3, 1, document.getElementById("TimeBox").childNodes.length, ItemNumber + 1, 2);
         }
-        AddItem(3, 1, CurrentColumn + 1, CurrentColumn + 3, "div", NewValue, ItemNumber + 1);
+        AddItem(3, 1, CurrentColumn + 1, CurrentColumn + 3, "div", Value, ItemNumber + 1);
         AddItem(3, 1, CurrentColumn + 3, CurrentColumn + 3, "button", "+", ItemNumber + 2);
-        for (y = 1; y <= MainList[0].length; y++) {
-            ColumnCorrection(2, y, MainList[2].length, Math.floor(ItemNumber / 2) + 1, 1);
+        if (MainList[2].length > 1 && MainList[0].length > 0 && document.getElementById("DoseBox").childNodes.length > 0) {
+            for (y = 1; y <= MainList[0].length; y++) {
+                ColumnCorrection(2, y, document.querySelectorAll("[id^=\"2" + (y < 10 ? "0" + y : y) + "\"]").length, WhichChangeEnd(InputId, y), 1);
+            }
+        }
+        if (MainList[0].length > 0 && MainList[2].length == 2) {
+            for (x = 1; x <= MainList[0].length; x++) {
+                AddItem(2, x, 1, 3, "div", "&nbsp;", 1);
+                AddItem(2, x, 6, 8, "div", "&nbsp;", 3);
+                AddItem(2, x, 3, 6, "button", "+", 2);
+            }
         }
     }
     if (CurrentSection == 2) {
-        AddItem(2, CurrentRow, CurrentColumn, CurrentColumn + 3, "div", NewValue, ItemNumber);
+        AddItem(2, CurrentRow, CurrentColumn, CurrentColumn + 3, "div", Value, ItemNumber);
     }
 }
 function AddItem(Section, Row, DebutColumn, EndColumn, Type, Value, ItemNumber) {
@@ -70,18 +81,12 @@ function AddItem(Section, Row, DebutColumn, EndColumn, Type, Value, ItemNumber) 
         NewItem.outerHTML = "<div id=\"" + NewItem.id + "\" style=\"grid-row: " + Row + "; grid-column: " + DebutColumn + " / " + EndColumn + ";\">" + Value + "</div>";
     }
     else {
-        NewItem.outerHTML = "<button id=\"" + NewItem.id + "\" style=\"grid-row: " + Row + "; grid-column: " + DebutColumn + " / " + EndColumn + ";\" onclick=\"AddInputField(" + NewItem.id + ")\" ontouchstart=\"AddInputField(" + NewItem.id + ")\" onmouseover=\"Light('" + NewItem.id + "', '#FFFFFF', '#0099FF')\" onmouseout=\"Light('" + NewItem.id + "', '#00000040', '#FFFFFF40')\">" + Value + "</button>";
+        NewItem.outerHTML = "<button id=\"" + NewItem.id + "\" style=\"grid-row: " + Row + "; grid-column: " + DebutColumn + " / " + EndColumn + ";\" onclick=\"AddInputField(" + NewItem.id + ")\" ontouchstart=\"AddInputField(" + NewItem.id + ")\" onmouseover=\"Light('" + NewItem.id + "', '#FFFFFF', '#0099FF')\" onmouseout=\"Light('" + NewItem.id + "', '#00000010', '#FFFFFF')\">" + Value + "</button>";
     }
 }
-function KeyPressed(event, InputLocation) {
-    y = event.which || event.keyCode;
-    if (y == 13) {
-        AddData(InputLocation);
-    }
-}
-function ColumnCorrection(Section, Row, ChangeStart, ChangeEnd, ColumnShift) {
+function ColumnCorrection(Section, Row, ChangeStart, ChangeEnd, ElementShift) {
     if (Section == 2 && document.getElementById(Section + (Row < 10 ? "0" + Row : Row) + (ChangeEnd < 10 ? "0" + ChangeEnd : ChangeEnd)).localName == "div" && document.getElementById(Section + (Row < 10 ? "0" + Row : Row) + (ChangeEnd < 10 ? "0" + ChangeEnd : ChangeEnd)).innerHTML != "&nbsp;") {
-        ColumnShift = 0;
+        ElementShift = 0;
     }
     for (x = ChangeStart; x >= ChangeEnd; x--) {
         TempElement = document.getElementById(Section + (Row < 10 ? "0" + Row : Row) + (x < 10 ? "0" + x : x));
@@ -90,7 +95,6 @@ function ColumnCorrection(Section, Row, ChangeStart, ChangeEnd, ColumnShift) {
                 AddItem(2, Row, parseInt(TempElement.style.gridColumnEnd), parseInt(TempElement.style.gridColumnEnd) + 3, "button", "+", x + 1);
             }
             else if (TempElement.localName == "div" && TempElement.innerHTML != "&nbsp;") {
-                console.log("extension de la dose : ", TempElement.id);
                 TempElement.style.gridColumnEnd = parseInt(TempElement.style.gridColumnEnd) + 3;
             }
         }
@@ -98,7 +102,7 @@ function ColumnCorrection(Section, Row, ChangeStart, ChangeEnd, ColumnShift) {
             TempElement.style.gridColumnStart = parseInt(TempElement.style.gridColumnStart) + 3;
             TempElement.style.gridColumnEnd = parseInt(TempElement.style.gridColumnEnd) + 3;
             OldId = TempElement.id.toString();
-            NewId = Section + (Row < 10 ? "0" + Row : Row) + (x + ColumnShift < 10 ? "0" + (x + ColumnShift) : x + ColumnShift);
+            NewId = Section + (Row < 10 ? "0" + Row : Row) + (x + ElementShift < 10 ? "0" + (x + ElementShift) : x + ElementShift);
             TempElement.outerHTML = TempElement.outerHTML.replace(new RegExp(OldId, 'g'), NewId);
             if (x == ChangeEnd && TempElement.innerHTML == "&nbsp;") {
                 AddItem(2, Row, parseInt(TempElement.style.gridColumnStart) - 3, parseInt(TempElement.style.gridColumnStart), "button", "+", x);
@@ -111,4 +115,10 @@ function ColumnCorrection(Section, Row, ChangeStart, ChangeEnd, ColumnShift) {
             }
         }
     }
+}
+function WhichChangeEnd(ButtonLocation, Row) {
+    ButtonCompared = parseInt(document.getElementById(ButtonLocation).style.gridColumnStart);
+    ListOfColumnStarts = [...document.querySelectorAll("[id^=\"2" + (Row < 10 ? "0" + Row : Row) + "\"]")].map(x => parseInt(x.style.gridColumnStart));
+    ColumnStartOfChangEndIndex = ListOfColumnStarts.indexOf(Math.max(...ListOfColumnStarts.filter(x => ButtonCompared > x)));
+    return parseInt([...document.querySelectorAll("[id^=\"2" + (Row < 10 ? "0" + Row : Row) + "\"]")][ColumnStartOfChangEndIndex].id) - 20000 - Row * 100;
 }
