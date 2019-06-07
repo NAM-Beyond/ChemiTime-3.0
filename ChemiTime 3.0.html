@@ -13,7 +13,7 @@
                 INN
                 <hr>
                 <div id="INNBox">
-                    <button id="10101" style="grid-row: 1; grid-column: 1;" onclick="AddInputField(10101)" ontouchstart="AddInputField(10101)" onmouseover="Light('10101', '#FFFFFF', '#0099FF')" onmouseout="Light('10101', '#00000010', '#FFFFFF')">
+                    <button id="10101" style="grid-row: 1; grid-column: 1;" onclick="AddInputField(10101)" ontouchstart="AddInputField(10101)" onmouseover="Light('10101', '#FFFFFF', '#0099FF')" onmouseout="Light('10101', '#00000010', '#FFFF96')">
                         +
                     </button>
                 </div>
@@ -27,7 +27,7 @@
             <div style="grid-row: 2; grid-column: 1;"></div>
             <div class="Boxes" style="grid-row: 2; grid-column: 2 / 101;">
                 <div id="TimeBox">
-                    <button id="30101" style="grid-row: 1; grid-column: 1;" onclick="AddInputField(30101)" ontouchstart="AddInputField(30101)" onmouseover="Light('30101', '#FFFFFF', '#0099FF')" onmouseout="Light('30101', '#00000010', '#FFFFFF')">
+                    <button id="30101" style="grid-row: 1; grid-column: 1;" onclick="AddInputField(30101)" ontouchstart="AddInputField(30101)" onmouseover="Light('30101', '#FFFFFF', '#0099FF')" onmouseout="Light('30101', '#00000010', '#FFFF96')">
                         Time
                     </button>
                 </div>
@@ -36,7 +36,14 @@
         &nbsp;
         &nbsp;
         <footer>
-            <b>FOOTER</b>
+            <b><u>How to use this App</u></b><br>
+            <span>
+                - Click on the buttons to add a new item (top left are INNs, top right are doses, bottom right are dates)<br>
+                - Right now you have to double click (create the input field then focus that field) to enter new data since I can't manage to create autofocus on the newly created input field yet<br>
+                - It is advised to begin with entering 2 dates before adding INNs, even if that "INNs first" case has been carried<br>
+                - Doses buttons won't appear until 2 dates are created<br>
+                - You can use HTML tags, they should be taken into account (works for styling tags and style attributes)<br>
+            </span>
         </footer>
     </body>
 </html>
