@@ -50,7 +50,7 @@ function KeyPressed(event, InputLocation) {
 function AddData(Value, InputId) {
     if (CurrentSection == 1) /* INN Section */ {
 /* We add the new INN, then we add a button to permit the add of a next INN later */
-        MainList[CurrentSection - 1].push([InputId, Value]);
+        MainList[CurrentSection - 1].push([parseInt(InputId), Value]);
         AddItem(1, CurrentRow, 1, 1, "div", Value, 1);
         AddItem(1, CurrentRow + 1, 1, 1, "button", "+", 1);
         if (MainList[2].length > 0) {
@@ -63,12 +63,12 @@ function AddData(Value, InputId) {
             AddItem(2, CurrentRow, 3 * (x + 1), 3 * (x + 2), "button", "+", x + 2);
         }
     }
-    if (CurrentSection == 2) /* DoseBox */ {
-        MainList[CurrentSection - 1].push([InputId, Value]);
+    if (CurrentSection == 2) /* Dose Section */ {
+        MainList[CurrentSection - 1].push([parseInt(InputId), Value]);
         AddItem(2, CurrentRow, CurrentColumn, CurrentColumn + 3, "div", Value, ItemNumber);
     }
     if (CurrentSection == 3) /* Time Section */ {
-        MainList[CurrentSection - 1].push([parseInt(2 + "01" + (ItemNumber + 1 < 10 ? "0" + (ItemNumber + 1) : ItemNumber + 1)), Value]);
+        MainList[CurrentSection - 1].push([parseInt(3 + "01" + (ItemNumber + 1 < 10 ? "0" + (ItemNumber + 1) : ItemNumber + 1)), Value]);
         MainList[2].sort();
         AddItem(3, 1, CurrentColumn, CurrentColumn, "button", "+", ItemNumber);
 /* If adding a date between two other dates, shift all the element to the right before adding the new date */
@@ -95,7 +95,7 @@ function AddData(Value, InputId) {
     }
 }
 
-/* Sub-function that manage adding a specific item in the timeline */
+/* Sub-function that manages adding a specific item in the timeline */
 function AddItem(Section, Row, DebutColumn, EndColumn, Type, Value, ItemNumber) {
     NewItem = document.createElement(Type);
     document.getElementById(Grids[Section - 1]).appendChild(NewItem);
@@ -162,10 +162,32 @@ function ColumnCorrection(Section, Row, ChangeStart, ChangeEnd, ElementShift) {
     }
 }
 
-/* Tricky sub-function that calculate the exact end of the shifting in the DoseBox to not go further, considering that some dose elements may overlap time elements so we can't use the number of time elements to define that end of shifting */
+/* Tricky sub-function that calculates the exact end of the shifting in the DoseBox to not go further, considering that some dose elements may overlap time elements so we can't use the number of time elements to define that end of shifting */
 function WhichChangeEnd(ButtonLocation, Row) {
     ButtonColumnStart = parseInt(document.getElementById(ButtonLocation).style.gridColumnStart);
     ListOfColumnStarts = [...document.querySelectorAll("[id^=\"2" + (Row < 10 ? "0" + Row : Row) + "\"]")].map(x => parseInt(x.style.gridColumnStart));
     ColumnStartOfChangEndIndex = ListOfColumnStarts.indexOf(Math.max(...ListOfColumnStarts.filter(x => ButtonColumnStart >= x)));
     return parseInt([...document.querySelectorAll("[id^=\"2" + (Row < 10 ? "0" + Row : Row) + "\"]")][ColumnStartOfChangEndIndex].id) - 20000 - Row * 100;
 }
+
+/* Function that downloads all the data contained in the MainList array as a JSON file for further use */
+function DownloadData(Filename, Data) {
+    element = document.createElement("a");
+    element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(Data));
+    element.setAttribute("download", Filename);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+}
+
+/*
+function LoadData(Filename) {
+    element = document.createElement("script");
+    element.setAttribute("type", "text/javascript");
+    element.setAttribute("src", Filename);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    MainList = JSON.parse(Filename);
+}
+*/
