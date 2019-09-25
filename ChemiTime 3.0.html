@@ -33,17 +33,20 @@
                 </div>
             </div>
         </div>
+        <br>
+        <button style="background-color: #FFFFFF; color: #000000;" onclick="DownloadData('ChemiData.json', 'ChemiData = ' + JSON.stringify(MainList))">Télécharger les données</button>
         &nbsp;
         &nbsp;
+        <button style="background-color: #FFFFFF; color: #000000;" onclick="LoadData('ChemiData.json')">Charger des données</button>
+        <br><br>
         <footer>
             <b><u>How to use this App</u></b><br>
-            <span>
                 - Click on the buttons to add a new item (top left are INNs, top right are doses, bottom right are dates)<br>
                 - Right now you have to double click (create the input field then focus that field) to enter new data since I can't manage to create autofocus on the newly created input field yet<br>
+                - Press "Enter" key in order to validate the data entered in the input field<br>
                 - It is advised to begin with entering 2 dates before adding INNs, even if that "INNs first" case has been carried<br>
                 - Doses buttons won't appear until 2 dates are created<br>
                 - You can use HTML tags, they should be taken into account (works for styling tags and style attributes)<br>
-            </span>
         </footer>
     </body>
 </html>
