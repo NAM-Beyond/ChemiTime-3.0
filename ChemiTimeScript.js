@@ -12,7 +12,7 @@ window.onload = function RemoveFuckingUselessEmptyTextNodes() {
     }
 }
 
-/* Function to enlight the button your mouse is over */
+/* Function to enlight the button your mouse is over it */
 function Light(ButtonId, ButtonFontColor, ButtonBackgroundColor) {
     document.getElementById(ButtonId).style.color = ButtonFontColor;
     document.getElementById(ButtonId).style.backgroundColor = ButtonBackgroundColor;
